@@ -14,6 +14,7 @@ public class PageParserConfig {
     private Long id;
     private DataNodeType dataNodeType;
     private String dataPropertyname;
+    private Boolean isUniqueIdentifier;
 
     private String elementSelector;
     private HtmlElementPartType elementPartType;
