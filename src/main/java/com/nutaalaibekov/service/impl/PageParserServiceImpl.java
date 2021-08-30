@@ -1,13 +1,14 @@
 package com.nutaalaibekov.service.impl;
 
 import com.google.gson.Gson;
-import com.nutaalaibekov.enums.DataType;
-import com.nutaalaibekov.enums.TargetType;
+import com.nutaalaibekov.enums.DataNodeType;
+import com.nutaalaibekov.enums.HtmlElementPartType;
 import com.nutaalaibekov.model.PageParserConfig;
 import com.nutaalaibekov.service.PageParserService;
 import com.nutaalaibekov.util.HttpUtil;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.util.HashMap;
@@ -23,7 +24,7 @@ public class PageParserServiceImpl implements PageParserService {
         Document doc = Jsoup.parse(html);
         Map<PageParserConfig, String> pageData = new HashMap<>();
         for(PageParserConfig config : configs) {
-            if (config.getDataType() == DataType.CHILD) {
+            if (config.getDataNodeType() == DataNodeType.CHILD) {
                 pageData.put(config, getDataFromDocument(doc, config));
             } else {
                 pageData.put(config, null);
@@ -36,12 +37,12 @@ public class PageParserServiceImpl implements PageParserService {
     private String getDataFromDocument(Document doc, PageParserConfig config) {
 
         String resultData = null;
-        Elements elements = doc.select(config.getTargetTagSelector());
+        Element element = doc.select(config.getElementSelector()).first();
 
-        if (config.getTargetType() == TargetType.ATTRIBUTE) {
-            resultData = elements.attr(config.getTargetId());
-        } else if (config.getTargetType() == TargetType.INNER_TEXT) {
-            resultData = elements.text();
+        if (config.getElementPartType() == HtmlElementPartType.ATTRIBUTE) {
+            resultData = element.attr(config.getElementPartId());
+        } else if (config.getElementPartType() == HtmlElementPartType.INNER_TEXT) {
+            resultData = element.text();
         } else {
             resultData = "UNKNOWN_TYPE";
         }
@@ -50,8 +51,29 @@ public class PageParserServiceImpl implements PageParserService {
     }
 
     private String formJsonData(Map<PageParserConfig, String> pageData) {
-        // TODO: finish him !
-        return GSON.toJson(pageData);
+        Map<String, Object> resultData = new HashMap<>();
+
+        for(Map.Entry<PageParserConfig, String> entry : pageData.entrySet()) {
+            fillProperty(resultData, entry.getKey(), entry.getValue());
+        }
+
+        return GSON.toJson(resultData);
+    }
+
+    private Map<String, Object> fillProperty(Map<String, Object> resultData, PageParserConfig config, String value) {
+        String[] propertyKeys = config.getDataPropertyname().split("\\.");
+        Map<String, Object> currentMap = resultData;
+        for(int i = 0; i < propertyKeys.length; i++) {
+            if (propertyKeys.length - 1 == i && config.getDataNodeType() == DataNodeType.CHILD) {
+                currentMap.put(propertyKeys[i], value);
+                break;
+            }
+
+            Map<String, Object> newMap = new HashMap<>();
+            currentMap.put(propertyKeys[i], newMap);
+            currentMap = newMap;
+        }
+        return resultData;
     }
 
 

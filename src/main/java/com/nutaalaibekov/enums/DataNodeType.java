@@ -1,6 +1,6 @@
 package com.nutaalaibekov.enums;
 
-public enum DataType {
+public enum DataNodeType {
     PARENT,
     CHILD;
 }

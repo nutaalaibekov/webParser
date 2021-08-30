@@ -1,6 +1,6 @@
 package com.nutaalaibekov.enums;
 
-public enum TargetType {
+public enum HtmlElementPartType {
     ATTRIBUTE,
     INNER_TEXT;
 }

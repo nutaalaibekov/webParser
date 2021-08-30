@@ -1,7 +1,7 @@
 package com.nutaalaibekov.model;
 
-import com.nutaalaibekov.enums.DataType;
-import com.nutaalaibekov.enums.TargetType;
+import com.nutaalaibekov.enums.DataNodeType;
+import com.nutaalaibekov.enums.HtmlElementPartType;
 import lombok.*;
 
 @Getter
@@ -12,11 +12,12 @@ import lombok.*;
 @EqualsAndHashCode
 public class PageParserConfig {
     private Long id;
-    private DataType dataType;
-    private String targetTagSelector;
-    private TargetType targetType;
-    private String targetId;
-    private String fieldName;
-    private Long parentId;
+    private DataNodeType dataNodeType;
+    private String dataPropertyname;
+
+    private String elementSelector;
+    private HtmlElementPartType elementPartType;
+    private String elementPartId;
+
     private Long pageId;
 }
