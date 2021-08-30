@@ -6,5 +6,5 @@ import com.nutaalaibekov.model.PageParserConfig;
 import java.util.List;
 
 public interface PageParserService {
-    String parsePage(String url, List<PageParserConfig> configs);
+    List<String> parsePage(String url, List<PageParserConfig> configs);
 }

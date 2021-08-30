@@ -12,68 +12,58 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class PageParserServiceImpl implements PageParserService {
     private final Gson GSON = new Gson();
 
     @Override
-    public String parsePage(String url, List<PageParserConfig> configs) {
+    public List<String> parsePage(String url, List<PageParserConfig> configs) {
         String html = HttpUtil.get(url);
         Document doc = Jsoup.parse(html);
-        Map<PageParserConfig, String> pageData = new HashMap<>();
-        for(PageParserConfig config : configs) {
-            if (config.getDataNodeType() == DataNodeType.CHILD) {
-                pageData.put(config, getDataFromDocument(doc, config));
-            } else {
-                pageData.put(config, null);
+
+        PageParserConfig rootConfig = configs.stream()
+                                            .filter(x -> x.getDataNodeType() == DataNodeType.ROOT)
+                                            .findFirst()
+                                            .orElseThrow(IllegalArgumentException::new);
+
+        List<PageParserConfig> childConfigs = configs.stream()
+                                                    .filter(x -> x.getDataNodeType() != DataNodeType.ROOT)
+                                                    .collect(Collectors.toList());
+
+        List<String> result = new LinkedList<>();
+        Elements elements = doc.select(rootConfig.getElementSelector());
+        for(Element element : elements) {
+            result.add(getDataFromRoot(element, childConfigs));
+        }
+
+        return result;
+    }
+
+    private String getDataFromRoot(Element rootElement, List<PageParserConfig> childConfigs) {
+        Map<String, String> map = new HashMap<>();
+        for(PageParserConfig childConfig : childConfigs) {
+            map.put(childConfig.getDataPropertyname(), getDataFromElement(rootElement, childConfig));
+        }
+        return GSON.toJson(map);
+    }
+
+    private String getDataFromElement(Element rootElement, PageParserConfig childConfig) {
+        List<String> elementValues = new LinkedList<>();
+
+        Elements elements = rootElement.select(childConfig.getElementSelector());
+        for(Element element : elements) {
+            if (childConfig.getElementPartType() == HtmlElementPartType.ATTRIBUTE) {
+                elementValues.add(element.attr(childConfig.getElementPartId()));
+            } else if (childConfig.getElementPartType() == HtmlElementPartType.INNER_TEXT) {
+                elementValues.add(element.text());
             }
         }
 
-        return formJsonData(pageData);
-    }
-
-    private String getDataFromDocument(Document doc, PageParserConfig config) {
-
-        String resultData = null;
-        Element element = doc.select(config.getElementSelector()).first();
-
-        if (config.getElementPartType() == HtmlElementPartType.ATTRIBUTE) {
-            resultData = element.attr(config.getElementPartId());
-        } else if (config.getElementPartType() == HtmlElementPartType.INNER_TEXT) {
-            resultData = element.text();
-        } else {
-            resultData = "UNKNOWN_TYPE";
-        }
-
-        return resultData;
-    }
-
-    private String formJsonData(Map<PageParserConfig, String> pageData) {
-        Map<String, Object> resultData = new HashMap<>();
-
-        for(Map.Entry<PageParserConfig, String> entry : pageData.entrySet()) {
-            fillProperty(resultData, entry.getKey(), entry.getValue());
-        }
-
-        return GSON.toJson(resultData);
-    }
-
-    private Map<String, Object> fillProperty(Map<String, Object> resultData, PageParserConfig config, String value) {
-        String[] propertyKeys = config.getDataPropertyname().split("\\.");
-        Map<String, Object> currentMap = resultData;
-        for(int i = 0; i < propertyKeys.length; i++) {
-            if (propertyKeys.length - 1 == i && config.getDataNodeType() == DataNodeType.CHILD) {
-                currentMap.put(propertyKeys[i], value);
-                break;
-            }
-
-            Map<String, Object> newMap = new HashMap<>();
-            currentMap.put(propertyKeys[i], newMap);
-            currentMap = newMap;
-        }
-        return resultData;
+        return String.join(",", elementValues);
     }
 
 

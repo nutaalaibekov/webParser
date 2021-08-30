@@ -15,25 +15,34 @@ public class Main {
         List<PageParserConfig> configs = new ArrayList<>();
         configs.add(PageParserConfig.builder()
                 .id(1l)
-                .dataNodeType(DataNodeType.CHILD)
-                .dataPropertyname("salary")
-                .elementSelector(".vacancy-serp .vacancy-serp-item .vacancy-serp-item__info .resume-search-item__name .bloko-link")
-                .elementPartType(HtmlElementPartType.INNER_TEXT)
+                .dataNodeType(DataNodeType.ROOT)
+                .dataPropertyname("vacancy")
+                .elementSelector("#HH-React-Root div.bloko-columns-wrapper  div.sticky-container > div.vacancy-serp-wrapper > div.bloko-column div.vacancy-serp > div.vacancy-serp-item")
+                .elementPartType(null)
                 .elementPartId(null)
                 .pageId(1l)
                 .build());
         configs.add(PageParserConfig.builder()
                 .id(2l)
                 .dataNodeType(DataNodeType.CHILD)
-                .dataPropertyname("title")
-                .elementSelector(".vacancy-serp .vacancy-serp-item .vacancy-serp-item__sidebar bloko-header-section-3.bloko-header-section-3_lite")
+                .dataPropertyname("salary")
+                .elementSelector("div.vacancy-serp-item__sidebar > span")
                 .elementPartType(HtmlElementPartType.INNER_TEXT)
                 .elementPartId(null)
                 .pageId(2l)
                 .build());
+        configs.add(PageParserConfig.builder()
+                .id(3l)
+                .dataNodeType(DataNodeType.CHILD)
+                .dataPropertyname("title")
+                .elementSelector("div.vacancy-serp-item__info span.resume-search-item__name span.g-user-content a.bloko-link")
+                .elementPartType(HtmlElementPartType.INNER_TEXT)
+                .elementPartId(null)
+                .pageId(3l)
+                .build());
         PageParserService parserService = new PageParserServiceImpl();
 
-        String jsonData = parserService.parsePage(url, configs);
+        List<String> jsonData = parserService.parsePage(url, configs);
         System.out.println(jsonData);
 
     }
