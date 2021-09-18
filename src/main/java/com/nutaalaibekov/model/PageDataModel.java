@@ -9,6 +9,7 @@ import java.util.Date;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString
 public class PageDataModel {
     private Long id;
     private String data;

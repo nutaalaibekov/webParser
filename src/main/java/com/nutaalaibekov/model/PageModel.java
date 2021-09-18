@@ -9,8 +9,7 @@ import lombok.*;
 @NoArgsConstructor
 public class PageModel {
     private Long id;
-    private String uri;
-    private String urls;
+    private String url;
     private Long categoryId;
     private Long websiteId;
 }

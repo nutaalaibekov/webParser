@@ -9,7 +9,7 @@ import lombok.*;
 @NoArgsConstructor
 public class WebSiteModel {
     private Long id;
-    private String uri;
     private String url;
     private String description;
+    private boolean isActive;
 }

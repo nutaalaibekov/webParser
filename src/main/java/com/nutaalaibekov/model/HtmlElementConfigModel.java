@@ -9,9 +9,7 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode
-public class PageParserConfig {
-    private Long id;
+public class HtmlElementConfigModel {
     private DataNodeType dataNodeType;
     private String dataPropertyname;
     private Boolean isUniqueIdentifier;
@@ -19,6 +17,4 @@ public class PageParserConfig {
     private String elementSelector;
     private HtmlElementPartType elementPartType;
     private String elementPartId;
-
-    private Long pageId;
 }

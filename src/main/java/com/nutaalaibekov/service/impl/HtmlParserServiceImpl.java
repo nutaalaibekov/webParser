@@ -3,9 +3,11 @@ package com.nutaalaibekov.service.impl;
 import com.google.gson.Gson;
 import com.nutaalaibekov.enums.DataNodeType;
 import com.nutaalaibekov.enums.HtmlElementPartType;
+import com.nutaalaibekov.model.HtmlElementConfigModel;
 import com.nutaalaibekov.model.PageDataModel;
-import com.nutaalaibekov.model.PageParserConfig;
-import com.nutaalaibekov.service.PageParserService;
+import com.nutaalaibekov.model.PageModel;
+import com.nutaalaibekov.model.PageTargetElementModel;
+import com.nutaalaibekov.service.HtmlParserService;
 import com.nutaalaibekov.util.HttpUtil;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -15,20 +17,31 @@ import org.jsoup.select.Elements;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class PageParserServiceImpl implements PageParserService {
+public class HtmlParserServiceImpl implements HtmlParserService {
     private final Gson GSON = new Gson();
+    private final String url;
+    private final String html;
+    private final Document doc;
+
+    public HtmlParserServiceImpl(String url) {
+        this.url = url;
+        this.html = HttpUtil.get(url);
+        this.doc = Jsoup.parse(html);
+    }
 
     @Override
-    public List<PageDataModel> parsePage(String url, List<PageParserConfig> configs) {
-        String html = HttpUtil.get(url);
-        Document doc = Jsoup.parse(html);
+    public String findData(HtmlElementConfigModel configModel) {
+        return null;
+    }
 
-        PageParserConfig rootConfig = configs.stream()
+    private List<PageDataModel> parsePage(String url, List<PageTargetElementModel> configs) {
+
+        PageTargetElementModel rootConfig = configs.stream()
                                             .filter(x -> x.getDataNodeType() == DataNodeType.ROOT)
                                             .findFirst()
                                             .orElseThrow(IllegalArgumentException::new);
 
-        List<PageParserConfig> childConfigs = configs.stream()
+        List<PageTargetElementModel> childConfigs = configs.stream()
                                                     .filter(x -> x.getDataNodeType() != DataNodeType.ROOT)
                                                     .collect(Collectors.toList());
 
@@ -42,11 +55,11 @@ public class PageParserServiceImpl implements PageParserService {
         return result;
     }
 
-    private PageDataModel getDataFromRoot(Element rootElement, List<PageParserConfig> childConfigs) {
+    private PageDataModel getDataFromRoot(Element rootElement, List<PageTargetElementModel> childConfigs) {
         Map<String, String> map = new HashMap<>();
         String dataUniqueId = null;
 
-        for(PageParserConfig childConfig : childConfigs) {
+        for(PageTargetElementModel childConfig : childConfigs) {
             String value = getDataFromElement(rootElement, childConfig);
             map.put(childConfig.getDataPropertyname(), value);
             if (childConfig.getIsUniqueIdentifier()) {
@@ -62,7 +75,7 @@ public class PageParserServiceImpl implements PageParserService {
                 .build();
     }
 
-    private String getDataFromElement(Element rootElement, PageParserConfig childConfig) {
+    private String getDataFromElement(Element rootElement, PageTargetElementModel childConfig) {
         List<String> elementValues = new LinkedList<>();
 
         Elements elements = rootElement.select(childConfig.getElementSelector());
@@ -76,6 +89,7 @@ public class PageParserServiceImpl implements PageParserService {
 
         return String.join(",", elementValues);
     }
+
 
 
 }
