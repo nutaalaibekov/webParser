@@ -1,7 +1,7 @@
 package com.nutaalaibekov.dao.impl;
 
 import com.nutaalaibekov.dao.WebSiteDao;
-import com.nutaalaibekov.model.WebSiteModel;
+import com.nutaalaibekov.entity.WebSites;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -13,11 +13,11 @@ import java.util.List;
 public class WebSiteDaoImpl extends BaseDao implements WebSiteDao {
 
     @Override
-    public List<WebSiteModel> getAllActive() {
+    public List<WebSites> getAllActive() {
         Connection connection = null;
         PreparedStatement statement = null;
         ResultSet resultSet = null;
-        List<WebSiteModel> webSiteModels = new ArrayList<>();
+        List<WebSites> webSites = new ArrayList<>();
         try {
             connection = connect();
             statement = connection
@@ -30,14 +30,14 @@ public class WebSiteDaoImpl extends BaseDao implements WebSiteDao {
                             " where is_active = true");
             resultSet = statement.executeQuery();
             if (resultSet.next()) {
-                webSiteModels.add(WebSiteModel.builder()
+                webSites.add(WebSites.builder()
                         .id(resultSet.getLong("id"))
                         .url(resultSet.getString("url"))
                         .description(resultSet.getString("description"))
                         .isActive(resultSet.getBoolean("is_active"))
                         .build());
             }
-            return webSiteModels;
+            return webSites;
         } catch (SQLException e) {
             System.out.println(e);
         } finally {

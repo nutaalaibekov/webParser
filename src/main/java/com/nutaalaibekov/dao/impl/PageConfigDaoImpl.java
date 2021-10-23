@@ -1,9 +1,9 @@
 package com.nutaalaibekov.dao.impl;
 
 import com.nutaalaibekov.dao.PageConfigDao;
-import com.nutaalaibekov.enums.DataNodeType;
-import com.nutaalaibekov.enums.HtmlElementPartType;
-import com.nutaalaibekov.model.PageTargetElementModel;
+import com.nutaalaibekov.enums.OutputDataType;
+import com.nutaalaibekov.enums.NodePart;
+import com.nutaalaibekov.entity.HtmlNodes;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -15,11 +15,11 @@ import java.util.List;
 public class PageConfigDaoImpl extends BaseDao implements PageConfigDao {
 
     @Override
-    public List<PageTargetElementModel> getByWebPageId(Integer webPageId) {
+    public List<HtmlNodes> getByWebPageId(Integer webPageId) {
         Connection connection = null;
         PreparedStatement statement = null;
         ResultSet resultSet = null;
-        List<PageTargetElementModel> parserConfigs = new ArrayList<>();
+        List<HtmlNodes> parserConfigs = new ArrayList<>();
         try {
             connection = connect();
             statement = connection
@@ -38,14 +38,14 @@ public class PageConfigDaoImpl extends BaseDao implements PageConfigDao {
             resultSet = statement.executeQuery();
             if (resultSet.next()) {
 
-                parserConfigs.add(PageTargetElementModel.builder()
+                parserConfigs.add(HtmlNodes.builder()
                         .id(resultSet.getLong("id"))
-                        .dataNodeType(DataNodeType.valueOf(resultSet.getString("data_node_type")) )
-                        .dataPropertyname(resultSet.getString("data_property_name"))
-                        .isUniqueIdentifier(resultSet.getBoolean("is_data_id"))
-                        .elementSelector(resultSet.getString("element_selector"))
-                        .elementPartType(HtmlElementPartType.valueOf(resultSet.getString("element_part")) )
-                        .elementPartId(resultSet.getString("element_part_key"))
+                        .type(OutputDataType.valueOf(resultSet.getString("data_node_type")) )
+                        .outputKey(resultSet.getString("data_property_name"))
+                        .isUnique(resultSet.getBoolean("is_data_id"))
+                        .nodeSelector(resultSet.getString("element_selector"))
+                        .nodePart(NodePart.valueOf(resultSet.getString("element_part")) )
+                        .nodePartKey(resultSet.getString("element_part_key"))
                         .pageId(resultSet.getLong("webpage_id"))
                         .build());
             }

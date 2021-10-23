@@ -1,9 +1,9 @@
 package com.nutaalaibekov.dao;
 
-import com.nutaalaibekov.model.PageModel;
+import com.nutaalaibekov.entity.HtmlPage;
 
 import java.util.List;
 
 public interface PageDao {
-    List<PageModel> getAllByWebSite(Integer webSiteId);
+    List<HtmlPage> getAllByWebSite(Integer webSiteId);
 }

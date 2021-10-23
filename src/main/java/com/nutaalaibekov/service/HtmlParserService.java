@@ -1,12 +1,11 @@
 package com.nutaalaibekov.service;
 
-import com.nutaalaibekov.model.HtmlElementConfigModel;
-import org.jsoup.nodes.Element;
+import com.nutaalaibekov.model.OutputDataModel;
 
 public interface HtmlParserService {
-    String findData(HtmlElementConfigModel configModel);
 
-    String findDataWithRoot(Element root, HtmlElementConfigModel configModel);
+    String getData(OutputDataModel configModel);
 
-    Element findElement(HtmlElementConfigModel configModel);
+    void changeRoot(OutputDataModel outputDataInfo);
+
 }

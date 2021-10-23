@@ -1,4 +1,4 @@
-package com.nutaalaibekov.model;
+package com.nutaalaibekov.entity;
 
 import lombok.*;
 
@@ -7,7 +7,7 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class DataCategory {
+public class Category {
     private Long id;
     private String name;
     private String description;

@@ -1,4 +1,4 @@
-package com.nutaalaibekov.model;
+package com.nutaalaibekov.entity;
 
 import lombok.*;
 
@@ -7,7 +7,7 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class PageModel {
+public class HtmlPage {
     private Long id;
     private String url;
     private Long categoryId;

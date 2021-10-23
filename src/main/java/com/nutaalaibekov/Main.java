@@ -7,7 +7,7 @@ public class Main {
     public static void main(String[] args) {
 
 
-        HtmlParserService htmlParserService = new HtmlParserServiceImpl();
+        HtmlParserService htmlParserService = new HtmlParserServiceImpl("");
 
 
     }

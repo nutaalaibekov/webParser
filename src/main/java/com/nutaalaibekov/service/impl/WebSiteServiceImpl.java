@@ -1,7 +1,7 @@
 package com.nutaalaibekov.service.impl;
 
 import com.nutaalaibekov.dao.WebSiteDao;
-import com.nutaalaibekov.model.WebSiteModel;
+import com.nutaalaibekov.entity.WebSites;
 import com.nutaalaibekov.service.WebSiteService;
 
 import java.util.List;
@@ -15,7 +15,7 @@ public class WebSiteServiceImpl implements WebSiteService {
     }
 
     @Override
-    public List<WebSiteModel> getAllActive() {
+    public List<WebSites> getAllActive() {
         return webSiteDao.getAllActive();
     }
 }

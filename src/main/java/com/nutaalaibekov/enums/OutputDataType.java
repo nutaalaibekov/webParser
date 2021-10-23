@@ -1,6 +1,6 @@
 package com.nutaalaibekov.enums;
 
-public enum DataNodeType {
+public enum OutputDataType {
     ROOT,
     PARENT,
     CHILD;

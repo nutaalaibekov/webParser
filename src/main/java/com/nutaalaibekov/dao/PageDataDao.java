@@ -1,7 +1,7 @@
 package com.nutaalaibekov.dao;
 
-import com.nutaalaibekov.model.PageDataModel;
+import com.nutaalaibekov.entity.MinedData;
 
 public interface PageDataDao {
-    PageDataModel save(PageDataModel pageDataModel);
+    MinedData save(MinedData minedData);
 }

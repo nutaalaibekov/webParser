@@ -1,9 +1,9 @@
 package com.nutaalaibekov.dao;
 
-import com.nutaalaibekov.model.PageTargetElementModel;
+import com.nutaalaibekov.entity.HtmlNodes;
 
 import java.util.List;
 
 public interface PageConfigDao {
-    List<PageTargetElementModel> getByWebPageId(Integer webPageId);
+    List<HtmlNodes> getByWebPageId(Integer webPageId);
 }
