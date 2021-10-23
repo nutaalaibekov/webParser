@@ -4,6 +4,6 @@ import com.nutaalaibekov.entity.HtmlNodes;
 
 import java.util.List;
 
-public interface PageConfigDao {
+public interface HtmlNodesDao {
     List<HtmlNodes> getByWebPageId(Integer webPageId);
 }

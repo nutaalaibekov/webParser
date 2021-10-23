@@ -1,6 +1,6 @@
 package com.nutaalaibekov.service.impl;
 
-import com.nutaalaibekov.dao.PageConfigDao;
+import com.nutaalaibekov.dao.HtmlNodesDao;
 import com.nutaalaibekov.entity.HtmlNodes;
 import com.nutaalaibekov.service.HtmlNodesService;
 
@@ -8,10 +8,10 @@ import java.util.List;
 
 public class HtmlNodesServiceImpl implements HtmlNodesService {
 
-    private final PageConfigDao pageConfigDao;
+    private final HtmlNodesDao htmlNodesDao;
 
-    public HtmlNodesServiceImpl(PageConfigDao pageConfigDao) {
-        this.pageConfigDao = pageConfigDao;
+    public HtmlNodesServiceImpl(HtmlNodesDao htmlNodesDao) {
+        this.htmlNodesDao = htmlNodesDao;
     }
 
     @Override

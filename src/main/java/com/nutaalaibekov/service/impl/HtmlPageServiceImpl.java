@@ -1,6 +1,6 @@
 package com.nutaalaibekov.service.impl;
 
-import com.nutaalaibekov.dao.PageDao;
+import com.nutaalaibekov.dao.HtmlPageDao;
 import com.nutaalaibekov.entity.HtmlPage;
 import com.nutaalaibekov.service.HtmlPageService;
 
@@ -8,14 +8,14 @@ import java.util.List;
 
 public class HtmlPageServiceImpl implements HtmlPageService {
 
-    private final PageDao pageDao;
+    private final HtmlPageDao htmlPageDao;
 
-    public HtmlPageServiceImpl(PageDao pageDao) {
-        this.pageDao = pageDao;
+    public HtmlPageServiceImpl(HtmlPageDao htmlPageDao) {
+        this.htmlPageDao = htmlPageDao;
     }
 
     @Override
     public List<HtmlPage> getAllByWebSite(Integer webSiteId) {
-        return pageDao.getAllByWebSite(webSiteId);
+        return htmlPageDao.getAllByWebSite(webSiteId);
     }
 }

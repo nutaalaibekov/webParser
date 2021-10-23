@@ -1,6 +1,6 @@
 package com.nutaalaibekov.dao.impl;
 
-import com.nutaalaibekov.dao.PageDao;
+import com.nutaalaibekov.dao.HtmlPageDao;
 import com.nutaalaibekov.entity.HtmlPage;
 
 import java.sql.Connection;
@@ -10,7 +10,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PageDaoImpl extends BaseDao implements PageDao {
+public class HtmlPageDaoImpl extends BaseDao implements HtmlPageDao {
 
     @Override
     public List<HtmlPage> getAllByWebSite(Integer webSiteId) {

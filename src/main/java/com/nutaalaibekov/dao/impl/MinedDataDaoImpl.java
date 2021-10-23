@@ -1,12 +1,12 @@
 package com.nutaalaibekov.dao.impl;
 
-import com.nutaalaibekov.dao.PageDataDao;
+import com.nutaalaibekov.dao.MinedDataDao;
 import com.nutaalaibekov.entity.MinedData;
 import com.nutaalaibekov.util.DateUtil;
 
 import java.sql.*;
 
-public class PageDataDaoImpl extends BaseDao implements PageDataDao {
+public class MinedDataDaoImpl extends BaseDao implements MinedDataDao {
 
     @Override
     public MinedData save(MinedData minedData) {
@@ -20,7 +20,7 @@ public class PageDataDaoImpl extends BaseDao implements PageDataDao {
                     .prepareStatement("insert into WEBPAGE_DATA(json_data, data_id, created_date, webpage_id) \n" +
                             "                  values(?, ?, ?, ?);", Statement.RETURN_GENERATED_KEYS);
             statement.setString(1, minedData.getData());
-            statement.setString(2, minedData.getDataUniqueId());
+            statement.setBoolean(2, minedData.getIsUnique());
             statement.setDate(3, DateUtil.toSqlDate(minedData.getCreatedDate()) );
             statement.setLong(4, minedData.getPageId());
 

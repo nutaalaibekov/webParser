@@ -1,6 +1,6 @@
 package com.nutaalaibekov.dao.impl;
 
-import com.nutaalaibekov.dao.PageConfigDao;
+import com.nutaalaibekov.dao.HtmlNodesDao;
 import com.nutaalaibekov.enums.OutputDataType;
 import com.nutaalaibekov.enums.NodePart;
 import com.nutaalaibekov.entity.HtmlNodes;
@@ -12,7 +12,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PageConfigDaoImpl extends BaseDao implements PageConfigDao {
+public class HtmlNodesDaoImpl extends BaseDao implements HtmlNodesDao {
 
     @Override
     public List<HtmlNodes> getByWebPageId(Integer webPageId) {
