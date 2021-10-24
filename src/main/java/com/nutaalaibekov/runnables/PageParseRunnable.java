@@ -1,12 +1,16 @@
 package com.nutaalaibekov.runnables;
 
-import com.nutaalaibekov.entity.HtmlNodes;
+import com.nutaalaibekov.entity.HtmlNode;
 import com.nutaalaibekov.entity.HtmlPage;
 import com.nutaalaibekov.entity.MinedData;
+import com.nutaalaibekov.enums.OutputDataType;
+import com.nutaalaibekov.model.NodeModel;
+import com.nutaalaibekov.model.NodePartModel;
 import com.nutaalaibekov.model.OutputDataModel;
 import com.nutaalaibekov.service.HtmlNodesService;
 import com.nutaalaibekov.service.HtmlParserService;
 import com.nutaalaibekov.service.MinedDataService;
+import com.nutaalaibekov.service.WebParserContext;
 import com.nutaalaibekov.service.impl.HtmlParserServiceImpl;
 
 import java.util.ArrayList;
@@ -20,24 +24,18 @@ public class PageParseRunnable implements Runnable {
 
     private final HtmlPage page;
 
-    public PageParseRunnable(HtmlNodesService htmlNodesService, MinedDataService minedDataService, HtmlPage page) {
-        this.htmlNodesService = htmlNodesService;
-        this.minedDataService = minedDataService;
+    public PageParseRunnable(WebParserContext context, HtmlPage page) {
+        this.htmlNodesService = (HtmlNodesService) context.getService(HtmlNodesService.class);
+        this.minedDataService = (MinedDataService) context.getService(MinedDataService.class);
         this.page = page;
-
-        init();
-
-    }
-
-    public void init() {
         htmlParserService = new HtmlParserServiceImpl(page.getUrl());
     }
 
     @Override
     public void run() {
         List<MinedData> resultData = new ArrayList<>();
-        List<HtmlNodes> htmlNodes = htmlNodesService.getByPageId(page.getId());
-        List<OutputDataModel> outputDataModels = getNodeModels(htmlNodes);
+        List<HtmlNode> htmlNodes = htmlNodesService.getByPageId(page.getId());
+        List<OutputDataModel> outputDataModels = getFromHtmlNodes(htmlNodes);
         OutputDataModel rootNode = getRoot(outputDataModels);
 
         if (rootNode != null) {
@@ -46,22 +44,58 @@ public class PageParseRunnable implements Runnable {
 
         for(OutputDataModel node : outputDataModels) {
             String minedData = htmlParserService.getData(node);
-            resultData.add(MinedData.builder()
+//            resultData.add();
+            minedDataService.save(MinedData.builder()
                     .pageId(page.getId())
                     .data(minedData)
                     .isUnique(node.getIsUnique())
                     .build());
         }
 
+
     }
 
-    private List<OutputDataModel> getNodeModels(List<HtmlNodes> nodes) {
+    private List<OutputDataModel> getFromHtmlNodes(List<HtmlNode> nodes) {
+        List<OutputDataModel> outputDataModels = new ArrayList<>();
+        for(HtmlNode node : nodes) {
+            outputDataModels.add(getOutputDataModelFromEntity(node));
+        }
+        return outputDataModels;
+    }
 
-        return null;
+    private OutputDataModel getOutputDataModelFromEntity(HtmlNode node) {
+        OutputDataModel outputDataModel = new OutputDataModel();
+        outputDataModel.setOutputKey(node.getOutputKey());
+        outputDataModel.setOutputType(node.getType());
+        outputDataModel.setIsUnique(node.getIsUnique());
+        outputDataModel.setTargetNode(getNodeModelFromEntity(node));
+
+        return outputDataModel;
+    }
+
+    private NodeModel getNodeModelFromEntity(HtmlNode node) {
+        NodeModel targetNode = new NodeModel();
+        targetNode.setSelector(node.getNodeSelector());
+        targetNode.setParts(getNodePartsFromEntity(node));
+        return targetNode;
+    }
+
+    private List<NodePartModel> getNodePartsFromEntity(HtmlNode node) {
+        List<NodePartModel> parts = new ArrayList<>();
+        NodePartModel part = new NodePartModel();
+        part.setKey(node.getNodePartKey());
+        part.setType(node.getNodePart());
+        parts.add(part);
+
+        return parts;
     }
 
     private OutputDataModel getRoot(List<OutputDataModel> nodeModels) {
-
+        for(OutputDataModel nodeModel : nodeModels) {
+            if (nodeModel.getOutputType() == OutputDataType.ROOT) {
+                return nodeModel;
+            }
+        }
         return null;
     }
 }

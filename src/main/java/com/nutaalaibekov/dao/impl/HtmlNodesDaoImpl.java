@@ -3,7 +3,7 @@ package com.nutaalaibekov.dao.impl;
 import com.nutaalaibekov.dao.HtmlNodesDao;
 import com.nutaalaibekov.enums.OutputDataType;
 import com.nutaalaibekov.enums.NodePart;
-import com.nutaalaibekov.entity.HtmlNodes;
+import com.nutaalaibekov.entity.HtmlNode;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -15,11 +15,11 @@ import java.util.List;
 public class HtmlNodesDaoImpl extends BaseDao implements HtmlNodesDao {
 
     @Override
-    public List<HtmlNodes> getByWebPageId(Integer webPageId) {
+    public List<HtmlNode> getByWebPageId(Long webPageId) {
         Connection connection = null;
         PreparedStatement statement = null;
         ResultSet resultSet = null;
-        List<HtmlNodes> parserConfigs = new ArrayList<>();
+        List<HtmlNode> parserConfigs = new ArrayList<>();
         try {
             connection = connect();
             statement = connection
@@ -34,11 +34,11 @@ public class HtmlNodesDaoImpl extends BaseDao implements HtmlNodesDao {
                             " webpage_id " +
                             "from webpage_parse_config " +
                             "where webpage_id = ?");
-            statement.setInt(1, webPageId);
+            statement.setLong(1, webPageId);
             resultSet = statement.executeQuery();
-            if (resultSet.next()) {
+            while (resultSet.next()) {
 
-                parserConfigs.add(HtmlNodes.builder()
+                parserConfigs.add(HtmlNode.builder()
                         .id(resultSet.getLong("id"))
                         .type(OutputDataType.valueOf(resultSet.getString("data_node_type")) )
                         .outputKey(resultSet.getString("data_property_name"))

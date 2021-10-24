@@ -1,9 +1,9 @@
 package com.nutaalaibekov.dao;
 
-import com.nutaalaibekov.entity.HtmlNodes;
+import com.nutaalaibekov.entity.HtmlNode;
 
 import java.util.List;
 
 public interface HtmlNodesDao {
-    List<HtmlNodes> getByWebPageId(Integer webPageId);
+    List<HtmlNode> getByWebPageId(Long webPageId);
 }

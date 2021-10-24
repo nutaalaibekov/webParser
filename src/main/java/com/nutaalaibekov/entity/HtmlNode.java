@@ -10,7 +10,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode
-public class HtmlNodes {
+public class HtmlNode {
     private Long id;
     private OutputDataType type;
     private String outputKey;

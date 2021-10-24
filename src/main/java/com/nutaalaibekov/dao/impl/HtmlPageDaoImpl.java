@@ -13,7 +13,7 @@ import java.util.List;
 public class HtmlPageDaoImpl extends BaseDao implements HtmlPageDao {
 
     @Override
-    public List<HtmlPage> getAllByWebSite(Integer webSiteId) {
+    public List<HtmlPage> getAllByWebSite(Long webSiteId) {
         Connection connection = null;
         PreparedStatement statement = null;
         ResultSet resultSet = null;
@@ -28,7 +28,7 @@ public class HtmlPageDaoImpl extends BaseDao implements HtmlPageDao {
                             " website_id" +
                             " from webpage" +
                             " where website_id = ?");
-            statement.setInt(1, webSiteId);
+            statement.setLong(1, webSiteId);
             resultSet = statement.executeQuery();
             if (resultSet.next()) {
                 htmlPages.add(HtmlPage.builder()

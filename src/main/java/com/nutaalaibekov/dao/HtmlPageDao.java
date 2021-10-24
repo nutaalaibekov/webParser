@@ -5,5 +5,5 @@ import com.nutaalaibekov.entity.HtmlPage;
 import java.util.List;
 
 public interface HtmlPageDao {
-    List<HtmlPage> getAllByWebSite(Integer webSiteId);
+    List<HtmlPage> getAllByWebSite(Long webSiteId);
 }

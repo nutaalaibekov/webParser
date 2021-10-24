@@ -14,6 +14,6 @@ public class MinedDataServiceImpl implements MinedDataService {
 
     @Override
     public void save(MinedData minedData) {
-
+        minedDataDao.save(minedData);
     }
 }

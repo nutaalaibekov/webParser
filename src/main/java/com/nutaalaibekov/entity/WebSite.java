@@ -7,7 +7,7 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class WebSites {
+public class WebSite {
     private Long id;
     private String url;
     private String description;

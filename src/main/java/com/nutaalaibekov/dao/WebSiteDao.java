@@ -1,9 +1,9 @@
 package com.nutaalaibekov.dao;
 
-import com.nutaalaibekov.entity.WebSites;
+import com.nutaalaibekov.entity.WebSite;
 
 import java.util.List;
 
 public interface WebSiteDao {
-    List<WebSites> getAllActive();
+    List<WebSite> getAllActive();
 }

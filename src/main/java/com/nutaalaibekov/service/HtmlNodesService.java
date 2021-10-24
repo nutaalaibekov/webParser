@@ -1,9 +1,9 @@
 package com.nutaalaibekov.service;
 
-import com.nutaalaibekov.entity.HtmlNodes;
+import com.nutaalaibekov.entity.HtmlNode;
 
 import java.util.List;
 
 public interface HtmlNodesService {
-    List<HtmlNodes> getByPageId(Long pageId);
+    List<HtmlNode> getByPageId(Long pageId);
 }

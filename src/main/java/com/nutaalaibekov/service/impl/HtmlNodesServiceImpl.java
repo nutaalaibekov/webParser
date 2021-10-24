@@ -1,7 +1,7 @@
 package com.nutaalaibekov.service.impl;
 
 import com.nutaalaibekov.dao.HtmlNodesDao;
-import com.nutaalaibekov.entity.HtmlNodes;
+import com.nutaalaibekov.entity.HtmlNode;
 import com.nutaalaibekov.service.HtmlNodesService;
 
 import java.util.List;
@@ -15,7 +15,7 @@ public class HtmlNodesServiceImpl implements HtmlNodesService {
     }
 
     @Override
-    public List<HtmlNodes> getByPageId(Long pageId) {
-        return null;
+    public List<HtmlNode> getByPageId(Long pageId) {
+        return htmlNodesDao.getByWebPageId(pageId);
     }
 }

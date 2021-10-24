@@ -1,9 +1,9 @@
 package com.nutaalaibekov.service;
 
-import com.nutaalaibekov.entity.WebSites;
+import com.nutaalaibekov.entity.WebSite;
 
 import java.util.List;
 
 public interface WebSiteService {
-    List<WebSites> getAllActive();
+    List<WebSite> getAllActive();
 }
