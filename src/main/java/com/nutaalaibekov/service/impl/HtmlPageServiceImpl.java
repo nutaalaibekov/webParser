@@ -15,7 +15,7 @@ public class HtmlPageServiceImpl implements HtmlPageService {
     }
 
     @Override
-    public List<HtmlPage> getAllByWebSite(Long webSiteId) {
+    public List<HtmlPage> getAllPagesBySiteId(Long webSiteId) {
         return htmlPageDao.getAllByWebSite(webSiteId);
     }
 }

@@ -17,7 +17,7 @@ public class MinedDataDaoImpl extends BaseDao implements MinedDataDao {
             minedData.setCreatedDate(new java.util.Date());
             connection = connect();
             statement = connection
-                    .prepareStatement("insert into WEBPAGE_DATA(json_data, data_id, created_date, webpage_id) \n" +
+                    .prepareStatement("insert into parse_execution_result(json_data, data_id, created_date, webpage_id) \n" +
                             "                  values(?, ?, ?, ?);", Statement.RETURN_GENERATED_KEYS);
             statement.setString(1, minedData.getData());
             statement.setBoolean(2, minedData.getIsUnique());

@@ -3,7 +3,7 @@ package com.nutaalaibekov.service.impl;
 import com.nutaalaibekov.enums.NodePart;
 import com.nutaalaibekov.model.NodeModel;
 import com.nutaalaibekov.model.NodePartModel;
-import com.nutaalaibekov.model.OutputDataModel;
+import com.nutaalaibekov.model.ParseInstructionModel;
 import com.nutaalaibekov.service.HtmlParserService;
 import com.nutaalaibekov.util.HttpUtil;
 import org.jsoup.Jsoup;
@@ -28,16 +28,16 @@ public class HtmlParserServiceImpl implements HtmlParserService {
     }
 
     @Override
-    public String getData(OutputDataModel outputDataInfo) {
-        NodeModel targetNodeInfo = outputDataInfo.getTargetNode();
+    public String getData(ParseInstructionModel outputDataInfo) {
+        NodeModel targetNodeInfo = outputDataInfo.getInputData();
         Elements nodes = getNodes(this.root, targetNodeInfo.getSelector());
         List<String> nodesInfo = getNodesInfo(nodes, targetNodeInfo.getParts());
         return nodesInfo.toString();
     }
 
     @Override
-    public void changeRoot(OutputDataModel outputDataInfo) {
-        NodeModel targetNodeInfo = outputDataInfo.getTargetNode();
+    public void changeRoot(ParseInstructionModel outputDataInfo) {
+        NodeModel targetNodeInfo = outputDataInfo.getInputData();
         Elements nodes = this.document.select(targetNodeInfo.getSelector());
         this.root = nodes.first();
     }

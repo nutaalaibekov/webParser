@@ -15,7 +15,7 @@ public class HtmlNodesServiceImpl implements HtmlNodesService {
     }
 
     @Override
-    public List<HtmlNode> getByPageId(Long pageId) {
+    public List<HtmlNode> getNodesByPageId(Long pageId) {
         return htmlNodesDao.getByWebPageId(pageId);
     }
 }

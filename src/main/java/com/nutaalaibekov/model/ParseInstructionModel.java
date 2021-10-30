@@ -8,10 +8,10 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class OutputDataModel {
+public class ParseInstructionModel {
     private OutputDataType outputType;
     private String outputKey;
     private Boolean isUnique;
 
-    private NodeModel targetNode;
+    private NodeModel inputData;
 }

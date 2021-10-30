@@ -4,9 +4,7 @@ import com.nutaalaibekov.entity.HtmlNode;
 import com.nutaalaibekov.entity.HtmlPage;
 import com.nutaalaibekov.entity.MinedData;
 import com.nutaalaibekov.enums.OutputDataType;
-import com.nutaalaibekov.model.NodeModel;
-import com.nutaalaibekov.model.NodePartModel;
-import com.nutaalaibekov.model.OutputDataModel;
+import com.nutaalaibekov.model.ParseInstructionModel;
 import com.nutaalaibekov.service.HtmlNodesService;
 import com.nutaalaibekov.service.HtmlParserService;
 import com.nutaalaibekov.service.MinedDataService;
@@ -33,65 +31,48 @@ public class PageParseRunnable implements Runnable {
 
     @Override
     public void run() {
-        List<MinedData> resultData = new ArrayList<>();
-        List<HtmlNode> htmlNodes = htmlNodesService.getByPageId(page.getId());
-        List<OutputDataModel> outputDataModels = getFromHtmlNodes(htmlNodes);
-        OutputDataModel rootNode = getRoot(outputDataModels);
+        List<HtmlNode> htmlNodes = htmlNodesService.getNodesByPageId(page.getId());
 
+        List<ParseInstructionModel> parseInstructionModels = getInstructionsFromEntities(htmlNodes);
+
+        setRootNode(parseInstructionModels);
+
+        List<MinedData> minedDatas = getDataByInstructions(parseInstructionModels);
+
+        minedDataService.saveAll(minedDatas);
+    }
+
+    public void setRootNode(List<ParseInstructionModel> parseInstructionModels) {
+        ParseInstructionModel rootNode = getRoot(parseInstructionModels);
         if (rootNode != null) {
             htmlParserService.changeRoot(rootNode);
         }
+    }
 
-        for(OutputDataModel node : outputDataModels) {
+    public List<MinedData> getDataByInstructions(List<ParseInstructionModel> parseInstructionModels) {
+        List<MinedData> minedDatas = new ArrayList<>();
+        for(ParseInstructionModel node : parseInstructionModels) {
             String minedData = htmlParserService.getData(node);
-//            resultData.add();
-            minedDataService.save(MinedData.builder()
+            minedDatas.add(MinedData.builder()
                     .pageId(page.getId())
                     .data(minedData)
                     .isUnique(node.getIsUnique())
                     .build());
         }
 
-
+        return minedDatas;
     }
 
-    private List<OutputDataModel> getFromHtmlNodes(List<HtmlNode> nodes) {
-        List<OutputDataModel> outputDataModels = new ArrayList<>();
-        for(HtmlNode node : nodes) {
-            outputDataModels.add(getOutputDataModelFromEntity(node));
+    private List<ParseInstructionModel> getInstructionsFromEntities(List<HtmlNode> entites) {
+        List<ParseInstructionModel> parseInstructionModels = new ArrayList<>();
+        for(HtmlNode node : entites) {
+            parseInstructionModels.add(node.toInstructionModel());
         }
-        return outputDataModels;
+        return parseInstructionModels;
     }
 
-    private OutputDataModel getOutputDataModelFromEntity(HtmlNode node) {
-        OutputDataModel outputDataModel = new OutputDataModel();
-        outputDataModel.setOutputKey(node.getOutputKey());
-        outputDataModel.setOutputType(node.getType());
-        outputDataModel.setIsUnique(node.getIsUnique());
-        outputDataModel.setTargetNode(getNodeModelFromEntity(node));
-
-        return outputDataModel;
-    }
-
-    private NodeModel getNodeModelFromEntity(HtmlNode node) {
-        NodeModel targetNode = new NodeModel();
-        targetNode.setSelector(node.getNodeSelector());
-        targetNode.setParts(getNodePartsFromEntity(node));
-        return targetNode;
-    }
-
-    private List<NodePartModel> getNodePartsFromEntity(HtmlNode node) {
-        List<NodePartModel> parts = new ArrayList<>();
-        NodePartModel part = new NodePartModel();
-        part.setKey(node.getNodePartKey());
-        part.setType(node.getNodePart());
-        parts.add(part);
-
-        return parts;
-    }
-
-    private OutputDataModel getRoot(List<OutputDataModel> nodeModels) {
-        for(OutputDataModel nodeModel : nodeModels) {
+    private ParseInstructionModel getRoot(List<ParseInstructionModel> nodeModels) {
+        for(ParseInstructionModel nodeModel : nodeModels) {
             if (nodeModel.getOutputType() == OutputDataType.ROOT) {
                 return nodeModel;
             }

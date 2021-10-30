@@ -17,7 +17,7 @@ public class Main {
         HtmlPageService htmlPageService = (HtmlPageService) context.getService(HtmlPageService.class);
         List<WebSite> webSites = webSiteService.getAllActive();
         for (WebSite webSite : webSites) {
-            List<HtmlPage> pages = htmlPageService.getAllByWebSite(webSite.getId());
+            List<HtmlPage> pages = htmlPageService.getAllPagesBySiteId(webSite.getId());
             for (HtmlPage page : pages) {
                 PageParseRunnable pageParseRunnable = new PageParseRunnable(context, page);
                 new Thread(pageParseRunnable).start();

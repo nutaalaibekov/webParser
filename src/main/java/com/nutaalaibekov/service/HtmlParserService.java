@@ -1,11 +1,11 @@
 package com.nutaalaibekov.service;
 
-import com.nutaalaibekov.model.OutputDataModel;
+import com.nutaalaibekov.model.ParseInstructionModel;
 
 public interface HtmlParserService {
 
-    String getData(OutputDataModel configModel);
+    String getData(ParseInstructionModel configModel);
 
-    void changeRoot(OutputDataModel outputDataInfo);
+    void changeRoot(ParseInstructionModel outputDataInfo);
 
 }

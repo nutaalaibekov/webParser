@@ -5,7 +5,7 @@ insert into data_category(name, description, parent_id) values(name, description
 
 insert into webpage(url, category_id, website_id) values(url, category_id, website_id);
 
-insert into webpage_data(json_data, data_id, created_date, webpage_id)
+insert into parse_execution_result(json_data, data_id, created_date, webpage_id)
                   values(json_data, data_id, created_date, webpage_id);
 
 
